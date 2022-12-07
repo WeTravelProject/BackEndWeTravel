@@ -76,10 +76,21 @@ public class BookingController {
         }
     }
 
-    @DeleteMapping("delete/request/cancel/booking/{requestCancelId}")
-    public ResponseEntity<?> deleteRequestCancelBooking(@PathVariable Long requestCancelId){
+    @GetMapping("get/list/request/cancel/booking")
+    public ResponseEntity<?> getListRequestCancel(@RequestParam(defaultValue = "all") String email ,
+            @RequestParam(defaultValue = "1") Integer page , @RequestParam(defaultValue = "1") Integer size){
         try{
-            Boolean result = bookingService.deleteRequestCancelBooking(requestCancelId);
+            Page<RequestCancelBookingDTO> result = bookingService.getListRequestCancelBooking(email ,page , size);
+            return new ResponseEntity<>(new BaseResponse(200 , result , Constant.Message.SUCCESS) , HttpStatus.OK);
+        }catch (HandlerException e){
+            return new ResponseEntity<>(new BaseResponse(400 , null , e.getMessage()) , HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("delete/request/cancel/booking/{bookingId}")
+    public ResponseEntity<?> deleteRequestCancelBooking(@PathVariable Long bookingId){
+        try{
+            Boolean result = bookingService.deleteRequestCancelBooking(bookingId);
             return new ResponseEntity<>(new BaseResponse(200 , result , Constant.Message.DELETE_SUCCESS) , HttpStatus.OK);
         }catch (HandlerException e){
             return new ResponseEntity<>(new BaseResponse(400 , null , e.getMessage()) , HttpStatus.BAD_REQUEST);

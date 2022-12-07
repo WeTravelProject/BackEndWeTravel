@@ -26,6 +26,10 @@ public class Post implements Serializable {
     @JoinColumn(name = "topic_id" , referencedColumnName = "topic_id")
     private Topic topicId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id" , referencedColumnName = "account_id")
+    private Account accountId;
+
     @Column(name = "date_post")
     private LocalDateTime timePost;
 
@@ -44,10 +48,13 @@ public class Post implements Serializable {
     @Column(name = "is_block")
     private Boolean isBlock;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id" , referencedColumnName = "service_id")
     private Service serviceId;
 
     @OneToMany(fetch = FetchType.LAZY , mappedBy = "postId" , cascade = CascadeType.ALL)
     private List<ReportPost> reportPostList;
+
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "postId" , cascade = CascadeType.ALL)
+    private List<Comment> commentList;
 }

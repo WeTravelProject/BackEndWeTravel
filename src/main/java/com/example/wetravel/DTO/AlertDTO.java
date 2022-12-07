@@ -5,18 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReportFeedbackDTO {
+public class AlertDTO {
+    private Long alertId;
+
     private Long accountId;
 
-    private String firstName;
+    private String title;
 
-    private String lastName;
+    private String content;
 
-    private Long feedbackId;
+    private Boolean status;
 
-    private Long reasonReportFeedbackId;
+    private LocalDateTime timeCreate;
 }

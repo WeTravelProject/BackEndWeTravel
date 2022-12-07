@@ -52,6 +52,7 @@ public class BookingServiceImpl implements BookingService {
             userBookingDTO.setTourId(u.getTourId().getTourId());
             userBookingDTO.setTourName(u.getTourId().getTourName());
             userBookingDTO.setTourType(u.getTourId().getTourType());
+            userBookingDTO.setTourStatus(u.getTourId().getStatus());
             userBookingDTO.setFullName(u.getFullName());
             userBookingDTO.setPhone(u.getPhone());
             userBookingDTO.setEmail(u.getEmail());
@@ -146,11 +147,63 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Boolean deleteRequestCancelBooking(Long requestCancelId) throws HandlerException{
-        if(!requestCancelRepository.existsRequestCancelByRequestCancelId(requestCancelId)){
+    public Page<RequestCancelBookingDTO> getListRequestCancelBooking(String email , Integer page, Integer size) throws HandlerException {
+        Pageable pageable = PageRequest.of(page - 1 , size);
+        List<RequestCancel> requestCancelList = requestCancelRepository.getListRequestCancel("%" + email + "%");
+        List<RequestCancelBookingDTO> requestCancelBookingDTOList = new ArrayList<>();
+        for (RequestCancel rc : requestCancelList){
+            RequestCancelBookingDTO requestCancelBookingDTO = new RequestCancelBookingDTO();
+            requestCancelBookingDTO.setRequestCancelBookingId(rc.getRequestCancelId());
+            requestCancelBookingDTO.setUserBookingId(rc.getUserBookingId().getUserBookingId());
+
+            UserBooking u = rc.getUserBookingId();
+            UserBookingDTO userBookingDTO = new UserBookingDTO();
+            userBookingDTO.setUserBookingId(u.getUserBookingId());
+            userBookingDTO.setAccountId(u.getAccountId().getAccountId());
+            userBookingDTO.setTourId(u.getTourId().getTourId());
+            userBookingDTO.setTourName(u.getTourId().getTourName());
+            userBookingDTO.setTourType(u.getTourId().getTourType());
+            userBookingDTO.setFullName(u.getFullName());
+            userBookingDTO.setPhone(u.getPhone());
+            userBookingDTO.setEmail(u.getEmail());
+            userBookingDTO.setBookingDate(u.getBookingDate());
+            userBookingDTO.setStartDate(u.getStartDate());
+            userBookingDTO.setIdCard(u.getIdCard());
+            userBookingDTO.setDateOfIssue(u.getDateOfIssue());
+            userBookingDTO.setPlaceOfIssue(u.getPlaceOfIssue());
+            userBookingDTO.setRequest(u.getRequest());
+            userBookingDTO.setAdultPrice(u.getAdultPrice());
+            userBookingDTO.setChildrenPrice(u.getChildrenPrice());
+            userBookingDTO.setNumberOfAdult(u.getNumberOfAdult());
+            userBookingDTO.setNumberOfChildren(u.getNumberOfChildren());
+            userBookingDTO.setTotalPrice(u.getTotalPrice());
+            userBookingDTO.setOrderId(u.getOrderId());
+            userBookingDTO.setOrderTitle(u.getOrderTitle());
+            userBookingDTO.setPayType(u.getPayType());
+            userBookingDTO.setStatus(u.getStatus());
+            userBookingDTO.setDeposit(u.getTourId().getDeposit());
+            userBookingDTO.setStatusDeposit(u.getStatusDeposit());
+            userBookingDTO.setIsFeedback(u.getIsFeedback());
+
+            requestCancelBookingDTO.setUserBookingDTO(userBookingDTO);
+            requestCancelBookingDTO.setRequestDate(rc.getRequestDate());
+            requestCancelBookingDTO.setDescription(rc.getDescription());
+            requestCancelBookingDTO.setStatus(rc.getStatus());
+            requestCancelBookingDTO.setReasonCancelId(rc.getReasonCancelId().getReasonCancelId());
+            requestCancelBookingDTO.setAccountEmail(u.getAccountId().getEmail());
+            requestCancelBookingDTOList.add(requestCancelBookingDTO);
+        }
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()) , requestCancelBookingDTOList.size());
+        return new PageImpl<>(requestCancelBookingDTOList.subList(start , end) , pageable , requestCancelBookingDTOList.size());
+    }
+
+    @Override
+    public Boolean deleteRequestCancelBooking(Long bookingId) throws HandlerException{
+        if(!requestCancelRepository.existsRequestCancelByUserBookingId_UserBookingId(bookingId)){
             throw new HandlerException("Request not found!");
         }
-        RequestCancel requestCancel = requestCancelRepository.getById(requestCancelId);
+        RequestCancel requestCancel = requestCancelRepository.getRequestCancelByUserBookingId_UserBookingId(bookingId);
         requestCancelRepository.delete(requestCancel);
         return true;
     }

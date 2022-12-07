@@ -9,32 +9,31 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Table(name = "Comment")
+@Table(name = "Alert")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Comment implements Serializable {
+public class Alert implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long commentId;
+    @Column(name = "alert_id")
+    private Long alertId;
 
     @ManyToOne
     @JoinColumn(name = "account_id" , referencedColumnName = "account_id")
     private Account accountId;
 
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "parent_comment_id")
-    private Long parentCommentId;
+    @Column(name = "status")
+    private Boolean status;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "post_id" , referencedColumnName = "post_id")
-    private Post postId;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
 }

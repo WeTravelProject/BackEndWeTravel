@@ -9,14 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReportFeedbackDTO {
+public class AccountDTO {
     private Long accountId;
-
-    private String firstName;
-
-    private String lastName;
-
-    private Long feedbackId;
-
-    private Long reasonReportFeedbackId;
 }

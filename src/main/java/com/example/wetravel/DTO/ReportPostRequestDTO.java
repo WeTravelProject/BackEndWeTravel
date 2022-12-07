@@ -5,18 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReportFeedbackDTO {
+public class ReportPostRequestDTO {
+    private Long postId;
+
     private Long accountId;
 
-    private String firstName;
+    private Long reasonReportPostId;
 
-    private String lastName;
-
-    private Long feedbackId;
-
-    private Long reasonReportFeedbackId;
+    private LocalDate createDate;
 }

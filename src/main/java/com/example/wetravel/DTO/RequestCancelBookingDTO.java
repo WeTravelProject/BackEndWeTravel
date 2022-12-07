@@ -12,7 +12,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class RequestCancelBookingDTO {
+    private Long requestCancelBookingId;
+
     private Long userBookingId;
+
+    private UserBookingDTO userBookingDTO;
 
     private Long reasonCancelId;
 
@@ -21,4 +25,6 @@ public class RequestCancelBookingDTO {
     private String description;
 
     private Integer status;
+
+    private String accountEmail;
 }
